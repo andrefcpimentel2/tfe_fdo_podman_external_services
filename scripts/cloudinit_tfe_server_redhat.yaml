@@ -19,6 +19,8 @@ write_files:
             value: "${tfe_license}"
           - name: "TFE_HTTP_PORT"
             value: "8080"
+          - name: "TFE_RUN_PIPELINE_IMAGE"
+            value: "hashicorp/tfc-agent:${tfe_agent_version}"
           - name: "TFE_HTTPS_PORT"
             value: "8443"
           - name: "TFE_HOSTNAME"
@@ -55,7 +57,7 @@ write_files:
             value: "${object_storage_s3_bucket}"
           - name: "TFE_OBJECT_STORAGE_S3_REGION"
             value: "${object_storage_s3_bucket_region}"
-          image: "images.releases.hashicorp.com/hashicorp/terraform-enterprise:v202312-1"
+          image: "images.releases.hashicorp.com/hashicorp/terraform-enterprise:${tfe_release}"
           name: "terraform-enterprise"
           ports:
           - containerPort: 8080
@@ -202,7 +204,7 @@ write_files:
 
       # install db
       dnf update -y
-      dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      dnf install -y https://ftp.postgresql.org/pub/repos/yum/reporpms/EL-9-aarch64/pgdg-redhat-repo-latest.noarch.rpm
       dnf -qy module disable postgresql
       dnf install -y postgresql14-server
       dnf install -y postgresql14-contrib
@@ -249,7 +251,7 @@ write_files:
 
       # install aws cli
       pushd /var/tmp
-      curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
       unzip awscliv2.zip
       sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/local/aws-cli --update
       
@@ -323,7 +325,7 @@ write_files:
       pushd /opt/tfe/
       
       echo "Get initial activation token"
-      INITIAL_TOKEN_TEMP=`podman exec -it terraform-enterprise-terraform-enterprise tfectl admin token`
+      INITIAL_TOKEN_TEMP=`sudo podman exec -it terraform-enterprise-terraform-enterprise tfectl admin token`
 
       # get the admin token you can user to create the first user
       # Create the first user called admin and get the token
