@@ -62,3 +62,14 @@ variable "object_storage_s3_bucket" {
 variable "object_storage_s3_bucket_region" {
   description = "Object storage s3 bucket region"
 }
+
+variable "compute_instance_type" {
+  description = "Compute instance type for the TFE server"
+  default     = "t4g.2xlarge"
+}
+
+variable "cpu_architecture" {
+  description = "CPU architecture to use for the TFE server"
+  type        = string
+  default     = "arm64"
+}

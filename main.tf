@@ -349,7 +349,7 @@ data "aws_ami" "redhat" {
 
   filter {
     name   = "architecture"
-    values = ["arm64"]
+    values = [var.cpu_architecture]
   }
 }
 
@@ -357,7 +357,7 @@ data "aws_ami" "redhat" {
 
 resource "aws_instance" "tfe_server" {
   ami           = data.aws_ami.redhat.id
-  instance_type = "t4g.xlarge"
+  instance_type =   var.compute_instance_type
   key_name      = "${var.tag_prefix}-key"
 
   network_interface {
