@@ -321,17 +321,20 @@ resource "aws_key_pair" "default-key" {
 }
 
 data "aws_ami" "ubuntu" {
-  most_recent = true
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-  owners = ["099720109477"]
-}
+   most_recent = true
+   filter {
+     name = "name"
+     # values = ["ubuntu/images/*ubuntu-jammy-22.04-amd64-server-*"]
+     values = ["ubuntu/images/*ubuntu-jammy-22.04-arm64-server-*"]
+   }
+
+   filter {
+     name   = "virtualization-type"
+     values = ["hvm"]
+   }
+
+   owners = ["099720109477"] # Canonical
+ }
 
 
 data "aws_ami" "redhat" {
@@ -341,12 +344,12 @@ data "aws_ami" "redhat" {
 
   filter {
     name   = "name"
-    values = ["RHEL-8.8*"] # Replace with the desired version or pattern
+    values = ["RHEL-9*"] # Replace with the desired version or pattern
   }
 
   filter {
     name   = "architecture"
-    values = ["x86_64"]
+    values = [var.cpu_architecture]
   }
 }
 
@@ -354,7 +357,7 @@ data "aws_ami" "redhat" {
 
 resource "aws_instance" "tfe_server" {
   ami           = data.aws_ami.redhat.id
-  instance_type = "t3.xlarge"
+  instance_type =   var.compute_instance_type
   key_name      = "${var.tag_prefix}-key"
 
   network_interface {
@@ -379,6 +382,7 @@ resource "aws_instance" "tfe_server" {
     region                          = var.region
     certificate_email               = var.certificate_email
     tfe_release                     = var.tfe_release
+    tfe_agent_version               = var.tfe_agent_version
     db_host                         = flatten(aws_network_interface.tfe-priv.private_ips)[0]
     object_storage_access_key       = aws_iam_access_key.tfefdo_user.secret
     object_storage_key_id           = aws_iam_access_key.tfefdo_user.id

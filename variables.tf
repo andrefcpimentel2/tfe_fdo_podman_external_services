@@ -23,6 +23,16 @@ variable "tfe_license" {
   description = "the TFE license as a string"
 }
 
+variable "tfe_release" {
+  description = "Which release version of TFE to install"
+
+}
+variable tfe_agent_version {
+  description = "Which release version of TFE agent to install"
+}
+variable "terraform_client_version" {
+  description = "Terraform client installed on the terraform client machine"
+}
 variable "dns_hostname" {
   description = "DNS hostname"
 }
@@ -35,13 +45,7 @@ variable "certificate_email" {
   description = "email address to register the certificate"
 }
 
-variable "tfe_release" {
-  description = "Which release version of TFE to install"
-}
 
-variable "terraform_client_version" {
-  description = "Terraform client installed on the terraform client machine"
-}
 
 # variable "object_storage_access_key" {
 #   description = "Object storage access key"
@@ -57,4 +61,15 @@ variable "object_storage_s3_bucket" {
 
 variable "object_storage_s3_bucket_region" {
   description = "Object storage s3 bucket region"
+}
+
+variable "compute_instance_type" {
+  description = "Compute instance type for the TFE server"
+  default     = "t4g.2xlarge"
+}
+
+variable "cpu_architecture" {
+  description = "CPU architecture to use for the TFE server"
+  type        = string
+  default     = "arm64"
 }
