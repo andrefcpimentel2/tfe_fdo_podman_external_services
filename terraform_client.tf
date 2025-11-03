@@ -55,7 +55,7 @@ resource "acme_certificate" "certificate-client" {
 
 resource "aws_instance" "terraform_client" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.small"
+  instance_type = "t4g.small"
   key_name      = "${var.tag_prefix}-key"
 
   network_interface {
