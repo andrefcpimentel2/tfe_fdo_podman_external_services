@@ -125,12 +125,7 @@ write_files:
         sleep 3 
       done 
       
-      # add public ssh key alvaro
-      curl -sL https://raw.githubusercontent.com/kikitux/curl-bash/master/provision/add_github_user_public_keys.sh | GITHUB_USER=kikitux bash
-      
-      # add public ssh key patrick
-      curl -sL https://raw.githubusercontent.com/kikitux/curl-bash/master/provision/add_github_user_public_keys.sh | GITHUB_USER=munnep bash
-      
+
       # install netdata tool
       curl -sL https://raw.githubusercontent.com/automodule/bash/main/install_netdata.sh | bash
       
